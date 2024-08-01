@@ -16,7 +16,7 @@ async function sendWebhook(appears: boolean) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      content: `${name.value} erscheint${appears ? '' : ' nicht'}.`,
+      content: `${name.value} erscheint${appears ? '! 🦈' : ' nicht.'}`,
     }),
   });
   if (!appears) return;
