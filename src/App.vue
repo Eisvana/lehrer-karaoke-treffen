@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-const name = ref('');
+const paramsString = window.location.search;
+const searchParams = new URLSearchParams(paramsString);
+const targetName = searchParams.get('name') ?? '';
+
+const name = ref(targetName);
 
 const webhook: string = atob(import.meta.env.VITE_DISCORD_WEBHOOK ?? '');
 
@@ -15,12 +19,27 @@ async function sendWebhook(appears: boolean) {
       content: `${name.value} erscheint${appears ? '' : ' nicht'}.`,
     }),
   });
+  if (!appears) return;
+  window.location.assign('https://gregor.pen-pixels.de');
 }
+
+const buttons = [
+  {
+    text: 'erscheine 🦈',
+    appears: true,
+  },
+  {
+    text: 'erscheine nicht',
+    appears: false,
+  },
+];
+
+const heading = computed(() => (targetName ? `Hallo ${targetName}!` : 'Zu-/Absage'));
 </script>
 
 <template>
-  <h1>Hello Gregor!</h1>
-  <p class="me">Ich,</p>
+  <h1 class="text-center">{{ heading }}</h1>
+  <p class="text-center">Ich,</p>
   <input
     v-model="name"
     placeholder="Name"
@@ -28,19 +47,16 @@ async function sendWebhook(appears: boolean) {
   />
   <div class="button-wrapper">
     <button
-      :disabled="!name"
-      @click="sendWebhook(true)"
+      v-for="button in buttons"
+      :aria-disabled="!name || undefined"
+      :class="{ secondary: !button.appears }"
+      :disabled="!name || undefined"
+      @click.prevent="sendWebhook(button.appears)"
     >
-      erscheine 🦈
-    </button>
-    <button
-      :disabled="!name"
-      class="secondary"
-      @click="sendWebhook(false)"
-    >
-      erscheine nicht
+      {{ button.text }}
     </button>
   </div>
+  <p class="text-center text-balanced date">am 16.08.2024 um 15:00 Uhr in Leipzig am Augustusplatz</p>
 </template>
 
 <style scoped>
@@ -48,8 +64,7 @@ async function sendWebhook(appears: boolean) {
   background-color: #647378;
 }
 
-h1,
-.me {
+.text-center {
   text-align: center;
 }
 
@@ -62,5 +77,13 @@ h1 {
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
+}
+
+.date {
+  margin-block-start: 0.5rem;
+}
+
+.text-balanced {
+  text-wrap: balance;
 }
 </style>
