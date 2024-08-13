@@ -81,10 +81,6 @@ const heading = computed(() => (targetName ? `Hallo ${targetName}!` : 'Zu-/Absag
 </template>
 
 <style scoped>
-.secondary:not(:hover) {
-  background-color: #647378;
-}
-
 .text-center {
   text-align: center;
 }
