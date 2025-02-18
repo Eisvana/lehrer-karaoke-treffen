@@ -12,7 +12,7 @@
   "devDependencies": {
     "@types/node": "^22.13.1",
     "@vitejs/plugin-vue": "^5.2.1",
-    "pinia": "^2.3.1",
+    "pinia": "^3.0.1",
     "prettier": "^3.5.0",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
